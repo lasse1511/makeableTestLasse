@@ -1,17 +1,20 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    uid: "",
+    uid: "", 
     email: ""
   },
   mutations: {
+    storeState: (state) => state
   },
   actions: {
   },
   modules: {
-  }
+  },
+  plugins: [createPersistedState()], 
 })

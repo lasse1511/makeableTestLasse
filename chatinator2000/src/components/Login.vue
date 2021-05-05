@@ -50,6 +50,7 @@ export default {
         .then(data => {
           this.$store.state.email = this.email
           this.$store.state.uid = data.user.uid
+          this.$store.commit("storeState")
           console.log(this.$store.state)
           this.$router.push("/main");
         })
@@ -64,6 +65,10 @@ export default {
 <style>
 * {
   box-sizing: border-box;
+}
+
+.form-control-lg {
+  font-size: 14px
 }
 .error-message {
   max-width: 278px;
