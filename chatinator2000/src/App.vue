@@ -31,7 +31,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   padding-top: 30px;
-  min-height: 1000px;
   margin: auto;
+  overflow: hidden;
 }
 </style>

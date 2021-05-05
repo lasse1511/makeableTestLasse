@@ -5,7 +5,7 @@
       <button class="logout_button" v-on:click="logout">Logout</button>
     </div>
     <div class="chatwindow">
-      <div class="messages">
+      <div id="messages" class="messages">
         <div
           class="flexcol message"
           v-for="message in messages"
@@ -14,17 +14,17 @@
           <div
             v-if="message.data.value"
             v-bind:class="{
-              ownName: message.data.email == email,
-              otherName: message.data.email != email,
+              ownName: message.data.email.toLowerCase() == email.toLowerCase(),
+              otherName: message.data.email.toLowerCase() != email.toLowerCase(),
             }"
           >
-            {{ email }}
+            {{ message.data.email }}
           </div>
           <div
             v-if="message.data.value"
             v-bind:class="{
-              ownMsg: message.data.email == email,
-              otherMsg: message.data.email != email,
+              ownMsg: message.data.email.toLowerCase() == email.toLowerCase(),
+              otherMsg: message.data.email.toLowerCase() != email.toLowerCase(),
             }"
           >
             {{ message.data.value }}
@@ -72,8 +72,8 @@ export default {
         .signOut()
         .then(() => {
           // alert("Successfully logged out");
-          this.$store.state.email = ""
-          this.$store.state.uid = ""
+          this.$store.state.email = "";
+          this.$store.state.uid = "";
           this.$router.push("/");
         })
         .catch((error) => {
@@ -102,6 +102,8 @@ export default {
       this.messages.sort(function (a, b) {
         return b.data.datetime_received - a.data.datetime_received;
       });
+      var container = this.$el.querySelector("#messages");
+      container.scrollTop = container.scrollHeight;
     });
   },
 };
@@ -200,9 +202,7 @@ a {
   top: 40px;
 }
 .main {
-  width: 100%;
-  height: 100%;
-  min-height: 500px;
+  overflow: hidden;
 }
 
 .inputField {
