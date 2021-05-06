@@ -14,12 +14,17 @@ export const censorWords = functions.firestore
         const words = value.split(' ')
         for (var i in words) {
             for (var x in wordsToCensor) {
-                console.log(words[i].toLowerCase(), x)
-                if (words[i].toLowerCase() === wordsToCensor[x]) {
-                    words[i] = '*****'
+                if (words[i].toLowerCase().includes(wordsToCensor[x])) {
+                    words[i] = words[i].toLowerCase()
+                    var replacementWord = ""
+                    for (let l = 0; l < wordsToCensor[x].length; l++) {
+                        replacementWord += '*'
+                    }
+                    words[i] = words[i].replace(wordsToCensor[x], replacementWord)
                 }
             }
         }
         console.log(words.join(" "))
-        return snap.ref.update({value: words.join(" ")})
+        return snap.ref.update({ value: words.join(" ") })
     });
+
