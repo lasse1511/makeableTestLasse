@@ -51,7 +51,6 @@ export default {
           this.$store.state.email = this.email
           this.$store.state.uid = data.user.uid
           this.$store.commit("storeState")
-          console.log(this.$store.state)
           this.$router.push("/main");
         })
         .catch((error) => {

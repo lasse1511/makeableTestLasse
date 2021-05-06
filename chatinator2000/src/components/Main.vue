@@ -14,17 +14,18 @@
           <div
             v-if="message.data.value"
             v-bind:class="{
-              ownName: message.data.email.toLowerCase() == email.toLowerCase(),
-              otherName: message.data.email.toLowerCase() != email.toLowerCase(),
+              ownName: message.data.email.toLowerCase() == email,
+              otherName:
+                message.data.email.toLowerCase() != email,
             }"
           >
-            {{ message.data.email }}
+            {{ message.data.email.toLowerCase() }}
           </div>
           <div
             v-if="message.data.value"
             v-bind:class="{
-              ownMsg: message.data.email.toLowerCase() == email.toLowerCase(),
-              otherMsg: message.data.email.toLowerCase() != email.toLowerCase(),
+              ownMsg: message.data.email.toLowerCase() == email,
+              otherMsg: message.data.email.toLowerCase() != email,
             }"
           >
             {{ message.data.value }}
@@ -51,13 +52,12 @@ export default {
   data: function () {
     return {
       msg: "",
-      email: this.$store.state.email,
+      email: this.$store.state.email.toLowerCase(),
       messages: [],
     };
   },
   methods: {
     add() {
-      console.log(this.email);
       db.collection("messages").add({
         value: this.msg,
         email: this.email,
@@ -71,7 +71,6 @@ export default {
         .auth()
         .signOut()
         .then(() => {
-          // alert("Successfully logged out");
           this.$store.state.email = "";
           this.$store.state.uid = "";
           this.$router.push("/");
@@ -93,18 +92,15 @@ export default {
         this.$router.push("/");
         console.log(err);
       });
-    // console.log(firebase.auth().getUser(this.$store.state.uid).then(() => true).catch(() => false))
-    db.collection("messages").onSnapshot((doc) => {
-      console.log("Current data: ", doc.docs[0]);
-      this.messages = doc.docs.map((doc) => {
-        return { id: doc.id, data: doc.data() };
+    db.collection("messages")
+      .orderBy("datetime_received", "desc")
+      .onSnapshot((doc) => {
+        this.messages = doc.docs.map((doc) => {
+          return { id: doc.id, data: doc.data() };
+        });
+        var container = this.$el.querySelector("#messages");
+        container.scrollTop = container.scrollHeight;
       });
-      this.messages.sort(function (a, b) {
-        return b.data.datetime_received - a.data.datetime_received;
-      });
-      var container = this.$el.querySelector("#messages");
-      container.scrollTop = container.scrollHeight;
-    });
   },
 };
 </script>
